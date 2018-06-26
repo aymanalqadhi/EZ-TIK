@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="EZ_TIK.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:EZ_TIK.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:regions="http://prismlibrary.com/"
+             xmlns:resources="clr-namespace:EZ_TIK.Resources;assembly=EZ-TIK.Resources"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+
+    <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+        <materialDesign:DrawerHost.LeftDrawerContent>
+            <DockPanel MinWidth="212">
+                <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                  DockPanel.Dock="Top"
+                                  HorizontalAlignment="Right" Margin="16"
+                                  IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                <ItemsControl x:Name="SideMenu" Margin="0 16 0 16"
+                             ItemsSource="{Binding SideMenuListItems}" HorizontalContentAlignment="Stretch">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Expander Header="{Binding Header}" FontWeight="Bold">
+                                <ListBox ItemsSource="{Binding Items}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                                    Command="{Binding DataContext.NavigationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding CommandParameter}"
+                                                    Content="{Binding Header}" Style="{StaticResource MaterialDesignFlatButton}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </materialDesign:DrawerHost.LeftDrawerContent>
+        <DockPanel>
+            <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                          Mode="PrimaryMid" DockPanel.Dock="Top" Panel.ZIndex="10">
+                <DockPanel>
+
+                    <!-- Hamburger Button -->
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                      IsChecked="False"
+                                      x:Name="MenuToggleButton" />
+
+                    <!-- Popup Menu -->
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+
+                        <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Padding="5 0" Command="{Binding NavigationCommand}" CommandParameter="HomeView" ToolTip="Navigate to the home view" materialDesign:RippleAssist.IsCentered="True">
+                            <materialDesign:PackIcon Kind="Home" Foreground="#fff" Height="25" Width="25" />
+                        </Button>
+
+                        <materialDesign:Badged Badge="{Binding UnseenNotificationsCount}" BadgeBackground="Red" BadgeForeground="#fff" VerticalAlignment="Center" Padding="0" Margin="10 0">
+                            <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Padding="5 0" Command="{Binding ToggleNotificationsTabCommand}" materialDesign:RippleAssist.IsCentered="True">
+                                <materialDesign:PackIcon Kind="BellRing" Foreground="#fff" Height="25" Width="25" />
+                            </Button>
+                        </materialDesign:Badged>
+
+                        <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges"
+                                                 StaysOpen="False">
+                            <StackPanel>
+
+                                <!-- Settings Button -->
+                                <Button VerticalContentAlignment="Bottom">
+                                    <StackPanel Orientation="Horizontal" Margin="5 0">
+                                        <materialDesign:PackIcon Kind="Settings" VerticalAlignment="Center"
+                                                                 Margin="5 0 " />
+                                        <TextBlock Text="Settings" />
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- Help Button -->
+                                <Button VerticalContentAlignment="Bottom">
+                                    <StackPanel Orientation="Horizontal" Margin="5 0">
+                                        <materialDesign:PackIcon Kind="HelpCircleOutline" VerticalAlignment="Center"
+                                                                 Margin="5 0 " />
+                                        <TextBlock Text="Help" />
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- About Button -->
+                                <Button VerticalContentAlignment="Bottom">
+                                    <StackPanel Orientation="Horizontal" Margin="5 0">
+                                        <materialDesign:PackIcon Kind="InformationOutline" VerticalAlignment="Center"
+                                                                 Margin="5 0 " />
+                                        <TextBlock Text="About" />
+                                    </StackPanel>
+                                </Button>
+
+                                <!-- Exit Button -->
+                                <Button VerticalContentAlignment="Bottom">
+                                    <StackPanel Orientation="Horizontal" Margin="5 0">
+                                        <materialDesign:PackIcon Kind="ExitToApp" VerticalAlignment="Center"
+                                                                 Margin="5 0 " />
+                                        <TextBlock Text="Exit" />
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+                    </StackPanel>
+
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="{Binding CurrentViewTitle}"/>
+                    
+                </DockPanel>
+            </materialDesign:ColorZone>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Main Content -->
+                <metro:TransitioningContentControl Transition="{Binding MainContentAnimation}"  Grid.Row="1" prism:RegionManager.RegionName="MainRegion"/>
+
+            </Grid>
+        </DockPanel>
+    </materialDesign:DrawerHost>
+
+
+</UserControl>

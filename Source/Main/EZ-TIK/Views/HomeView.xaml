@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="EZ_TIK.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:EZ_TIK.Views"
+             mc:Ignorable="d"
+             Background="{DynamicResource MaterialDesignPaper}"
+             d:DesignHeight="800" d:DesignWidth="1000">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock FontSize="60" FontWeight="ExtraLight">Weclome To EZ-TIK!</TextBlock>
+            <TextBlock FontSize="15" HorizontalAlignment="Center" Foreground="#99000000">A Full-Featured Software for Mikrotik Router OS Admins</TextBlock>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 30 0 0 ">
+                <Button Style="{StaticResource MaterialDesignFlatButton}">
+                    <md:PackIcon Kind="Facebook" />
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}">
+                    <md:PackIcon Kind="Twitter" />
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}">
+                    <md:PackIcon Kind="GooglePlus" />
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}">
+                    <md:PackIcon Kind="GooglePlay" />
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}">
+                    <md:PackIcon Kind="YoutubePlay" />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0 100 0 0" HorizontalAlignment="Center">
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="Auto" Padding="5 0" Margin="0 0 5 0">
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="HelpCircle" VerticalAlignment="Center" Height="30" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+                        <TextBlock Text="Tutorial" VerticalAlignment="Center" FontSize="20" FontWeight="Light" Margin="10"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="Auto" Padding="5 0" Margin="5 0">
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="NewBox" VerticalAlignment="Center" Height="30" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+                        <TextBlock Text="What's New?" VerticalAlignment="Center" FontSize="20" FontWeight="Light" Margin="10"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource MaterialDesignFlatButton}" Height="Auto" Padding="5 0" Margin="5 0">
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="Bug" VerticalAlignment="Center" Height="30" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+                        <TextBlock Text="Report Proplem" VerticalAlignment="Center" FontSize="20" FontWeight="Light" Margin="10"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="EZ_TIK.Views.UserManager_Views.Add_UserManager_Profile.AddUserManagerProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EZ_TIK.Views.UserManager_Views.Add_UserManager_Profile"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="374.828" d:DesignWidth="365.904" Background="{StaticResource MaterialDesignPaper}">
+    <Grid Panel.ZIndex="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+
+        <!--#region Header-->
+        <Grid Grid.Row="0">
+
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="10" Direction="0" Opacity=".8"/>
+            </Grid.Effect>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="11*"/>
+                <RowDefinition Height="14*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <ImageBrush ImageSource="/EZ-TIK;component/Res/Images/material-bg1.jpg" Stretch="UniformToFill"/>
+            </Grid.Background>
+
+            <TextBlock Grid.Row="1" Foreground="White" Margin="6,0,0,7" FontSize="18" VerticalAlignment="Bottom" Height="23.94">
+                <TextBlock.Effect>
+                    <DropShadowEffect Direction="0" BlurRadius="20"/>
+                </TextBlock.Effect>
+                UserManager Profile
+            </TextBlock>
+
+            <Button Command="{x:Static  md:DialogHost.CloseDialogCommand}" Style="{StaticResource MaterialDesignFlatButton}" Grid.Column="1" Height="Auto" Margin="0,0,0,0.985">
+                <md:PackIcon Kind="Close"/>
+            </Button>
+
+            <Button Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="0,11.04,17.18,-25.06" Grid.Row="1">
+                <md:PackIcon Kind="ChevronRight" Height="26" Width="26"/>
+            </Button>
+
+        </Grid>
+        <!--#endregion-->
+
+        <!--#region Body-->
+
+        <StackPanel Grid.Row="1" Margin="20 10" VerticalAlignment="Top">
+
+            <TextBox md:HintAssist.Hint="Name" md:HintAssist.IsFloating="True"/>
+
+            <md:Card md:ShadowAssist.ShadowDepth="Depth1" Margin="0 10 0 0">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0">Limitations</TextBlock>
+                    <Button Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Right" Grid.Row="0">
+                        <md:PackIcon Kind="Plus"/>
+                    </Button>
+
+                    <ListBox Grid.Row="1" MinHeight="180">
+                        <ListBox.Style>
+                            <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource MaterialDesignListBox}">
+                                <Style.Triggers>
+                                    <Trigger Property="HasItems" Value="False">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                        <md:PackIcon Foreground="#FFDADADA" Kind="HelpCircleOutline" Height="70" Width="70" HorizontalAlignment="Center"/>
+                                                        <TextBlock Foreground="#FFB8B8B8" Margin="0 5 0 0" TextAlignment="Center">There is not lmitiations for this profile. <LineBreak/> Add one using the (+) icon above</TextBlock>
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Style>
+                    </ListBox>
+
+                </Grid>
+
+            </md:Card>
+
+        </StackPanel>
+
+        <!--#endregion-->
+
+    </Grid>
+</UserControl>

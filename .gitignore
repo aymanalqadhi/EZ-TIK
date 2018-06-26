@@ -1,0 +1,15 @@
+# Ignore IDE files
+.vs/
+.vs/*
+
+# Ignore build files
+Build/
+Build/*
+**/bin/
+**/bin/*
+**/obj/
+**/obj/*
+
+# Ignore Dependencies
+Source/packages
+Source/packages/*

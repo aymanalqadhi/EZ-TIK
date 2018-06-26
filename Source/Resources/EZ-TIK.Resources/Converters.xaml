@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:EZ_TIK.Converters;assembly=EZ-TIK.Converters">
+
+    <!-- Converts boolean to its negative -->
+    <converters:NotConverter x:Key="NotConverter" />
+
+    <!-- Returns Visibility depending on if the value passed is null -->
+    <converters:IsNullToVisibilityConverter x:Key="IsNullToVisibilityConverter" />
+
+    <!-- Returns Visibility depending on selected rows -->
+    <converters:OnlyOneDetailedRowVisibleConverter x:Key="OnlyOneDetailedRowVisibleConverter" />
+
+    <!-- Returns Visibility depending on selected rows -->
+    <converters:MikrotikTimeToReadableConverter x:Key="MikrotikTimeToReadableConverter" />
+
+    <!-- Returns validity in readable string -->
+    <converters:IntToReadableValidityDaysConverter x:Key="IntToReadableValidityDaysConverter" />
+
+    <!-- Returns bytes in readable string -->
+    <converters:NumericToReadableBytesConverter x:Key="NumericToReadableBytesConverter" />
+
+    <!-- Returns value - parameter -->
+    <converters:MinusIntConverter x:Key="MinusIntConverter" />
+    
+</ResourceDictionary>

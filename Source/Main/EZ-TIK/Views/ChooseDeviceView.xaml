@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="EZ_TIK.Views.ChooseDeviceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:tz="http://schemas.abtsoftware.co.uk/transitionz"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1000"
+             Background="{DynamicResource MaterialDesignPaper}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <!-- Importing required resources -->
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- ListBox Resources -->
+                <ResourceDictionary Source="pack://application:,,,/EZ-TIK.Resources;component/ListBox.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Refresh Button -->
+        <Button IsEnabled="{Binding IsLoading, Converter={StaticResource NotConverter}}"
+                HorizontalContentAlignment="Right" Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                Command="{Binding RefreshDevicesCommand}"
+                Margin="10" FontSize="20" Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Right">
+            <md:PackIcon Kind="Refresh" Height="25" Width="{Binding RelativeSource={RelativeSource Self}}" />
+        </Button>
+
+        <!-- Title Text -->
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Text="Choose your RouterOS device" FontWeight="ExtraLight"
+                   FontSize="40" Margin="20 40" />
+
+        <!-- Main Routers list -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- IsLoading Progress bar -->
+            <Grid Height="8" Grid.Row="0">
+                <metro:MetroProgressBar
+                    IsIndeterminate="True"
+                    tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=200, TransitionOn=Visibility}"
+                    tz:Transitionz.Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Grid>
+
+            <!-- Routers List -->
+            <ListBox ItemTemplate="{StaticResource RouterOSListBoxItem}" Grid.Row="1" Margin="15"
+                     md:ShadowAssist.ShadowDepth="Depth2"
+                     ItemsSource="{Binding RoutersList, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+                     SelectedItem="{Binding SelectedRouter , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.Style>
+                    <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource MaterialDesignListBox}">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}"
+                                               Value="False" />
+                                    <Condition Binding="{Binding IsLoading}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+
+                                <!-- Set content to display when the list is empty -->
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <md:PackIcon Kind="RouterWireless" Height="60"
+                                                                     Width="{Binding RelativeSource={RelativeSource Self}}"
+                                                                     Margin="10 0" Foreground="#888" />
+                                                        <TextBlock FontSize="44" FontWeight="ExtraLight"
+                                                                   Foreground="#888">
+                                                            No Routers!
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    <TextBlock FontSize="17" Margin="10" Foreground="#888" HorizontalAlignment="Center">There is no mikrotik routers avaible, try entring your ip manualy</TextBlock>
+                                                </StackPanel>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="ItemsPanel">
+                            <Setter.Value>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.Style>
+            </ListBox>
+
+            <!-- Other Actions -->
+            <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="10 5 20 5" Orientation="Horizontal"
+                        VerticalAlignment="Bottom">
+                <TextBlock Foreground="{StaticResource AccentBaseColorBrush}" FontSize="15">
+                    <Hyperlink Foreground="{StaticResource AccentBaseColorBrush}" TextDecorations="None"
+                               Command="{Binding UseDefaultGatewayCommand}">
+                        Use Default Gateway
+                    </Hyperlink>
+                    <Run Text=" | " Foreground="{StaticResource AccentBaseColorBrush}" />
+                    <Hyperlink Foreground="{StaticResource AccentBaseColorBrush}" TextDecorations="None"
+                               Command="{Binding EnterIpManually}">
+                        Enter IP Manualy
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+
+        <!-- Next Button -->
+        <Button Command="{Binding SelectRouterCommand}" Padding="10" Height="Auto" Margin="10" FontSize="20"
+                Style="{StaticResource MaterialDesignFlatButton}" Grid.Row="2" HorizontalAlignment="Right" IsDefault="False">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="NEXT " />
+                <md:PackIcon Kind="ArrowRight" VerticalAlignment="Center" Height="25"
+                             Width="{Binding RelativeSource={RelativeSource Self}}" />
+            </StackPanel>
+        </Button>
+
+        <!-- Domain Button -->
+        <Button Command="{Binding GetDomainCommand}" Padding="10" Height="Auto" Margin="10" FontSize="20"
+                Style="{StaticResource MaterialDesignFlatButton}" Grid.Row="2" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal">
+                <md:PackIcon Kind="Web" VerticalAlignment="Center" Height="25"
+                             Width="{Binding RelativeSource={RelativeSource Self}}" />
+                <TextBlock Text=" CONNECT USING DOMAIN " />
+            </StackPanel>
+        </Button>
+
+    </Grid>
+</UserControl>

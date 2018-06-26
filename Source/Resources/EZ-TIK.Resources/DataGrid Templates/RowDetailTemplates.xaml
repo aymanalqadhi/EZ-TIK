@@ -1,0 +1,108 @@
+﻿<ResourceDictionary
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:EZ_TIK.Converters;assembly=EZ-TIK.Converters">
+
+    <converters:MikrotikTimeToReadableConverter x:Key="MikrotikTimeToReadableConverter" />
+
+    <!-- Hotspot User Detailed Row Template -->
+    <DataTemplate x:Key="HotspotUserDetailRowTemplate">
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <!-- Main Columns -->
+            <Grid.ColumnDefinitions>
+
+                <!-- ID and status column -->
+                <ColumnDefinition Width="Auto"/>
+
+                <!-- Info Column -->
+                <ColumnDefinition/>
+
+            </Grid.ColumnDefinitions>
+
+            <!-- ID And Status -->
+            <StackPanel Grid.Column="0" Margin="10 0" VerticalAlignment="Center">
+
+                <!-- ID -->
+                <TextBlock Text="{Binding Id , StringFormat={}*{0:X}}" Foreground="#999" FontSize="40"/>
+
+                <!-- Status -->
+                <TextBlock HorizontalAlignment="Center" Margin="5" FontSize="8">
+                    <Run Text="Printed" Foreground="DarkCyan"/> ,
+                    <Run Text="Banned" Foreground="Red"/>
+                </TextBlock>
+
+            </StackPanel>
+
+            <!-- Info -->
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="10 0" DataContext="{Binding}">
+
+                <!-- IP Address -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="IP Address" md:HintAssist.IsFloating="True" Text="{Binding IpAddress, FallbackValue=0.0.0.0, Mode=OneTime}" TextAlignment="Center" IsReadOnly="True"/>
+
+                <!-- Mac Address -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="Mac Address" md:HintAssist.IsFloating="True" Text="{Binding MacAddress, FallbackValue=00:00:00:00:00:00, Mode=OneTime}" TextAlignment="Center" IsReadOnly="True"/>
+
+                <!-- Uptime -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="Used Time" md:HintAssist.IsFloating="True" Text="{Binding UpTime,Converter={StaticResource MikrotikTimeToReadableConverter}, FallbackValue=Unused, Mode=OneWay}" TextAlignment="Center" IsReadOnly="True"/>
+
+                <!-- Server -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="Used Time" md:HintAssist.IsFloating="True" Text="{Binding Server}" TextAlignment="Center" IsReadOnly="True"/>
+
+            </StackPanel>
+        </Grid>
+        
+    </DataTemplate>
+
+    <!-- User Manager User Detailed Row Template -->
+    <DataTemplate x:Key="UserManagerUserDetailRowTemplate">
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <!-- Main Columns -->
+            <Grid.ColumnDefinitions>
+
+                <!-- ID and status column -->
+                <ColumnDefinition Width="Auto"/>
+
+                <!-- Info Column -->
+                <ColumnDefinition/>
+
+            </Grid.ColumnDefinitions>
+
+            <!-- ID And Status -->
+            <StackPanel Grid.Column="0" Margin="10 0" VerticalAlignment="Center">
+
+                <!-- ID -->
+                <TextBlock Text="{Binding Id , StringFormat={}*{0:X}}" Foreground="#999" FontSize="40"/>
+
+                <!-- Status -->
+                <TextBlock HorizontalAlignment="Center" Margin="5" FontSize="8">
+                    <Run Text="Printed" Foreground="DarkCyan"/> ,
+                    <Run Text="Banned" Foreground="Red"/>
+                </TextBlock>
+
+            </StackPanel>
+
+            <!-- Info -->
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="10 0" DataContext="{Binding}">
+
+                <!-- IP Address -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="IP Address" md:HintAssist.IsFloating="True" Text="{Binding IpAddress, FallbackValue=0.0.0.0, Mode=OneTime}" TextAlignment="Center" IsReadOnly="True"/>
+
+                <!-- Last Seen -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="Last Seen" md:HintAssist.IsFloating="True" Text="{Binding LastSeen, Mode=OneWay}" TextAlignment="Center" IsReadOnly="True"/>
+
+                <!-- Uptime -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="Used Time" md:HintAssist.IsFloating="True" Text="{Binding UptimeUsed, FallbackValue=Unused, Mode=OneWay}" TextAlignment="Center" IsReadOnly="True"/>
+
+                <!-- BytesOut -->
+                <TextBox Margin="5 0" Width="100" VerticalAlignment="Center" md:HintAssist.Hint="Used Download" md:HintAssist.IsFloating="True" Text="{Binding DownloadUsed, Mode=OneWay}" TextAlignment="Center" IsReadOnly="True"/>
+
+            </StackPanel>
+        </Grid>
+
+    </DataTemplate>
+
+</ResourceDictionary>
+

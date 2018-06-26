@@ -1,0 +1,188 @@
+﻿<UserControl x:Class="EZ_TIK.Views.AddHotspotUserLimitsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             Height="400" Width="400"
+             Background="{DynamicResource MaterialDesignPaper}"
+             DataContext="{Binding DataContext.LimitsViewModel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+
+            <!-- Header Row -->
+            <RowDefinition Height="100"/>
+
+            <!-- Finish button row -->
+            <RowDefinition Height="22"/>
+
+            <!-- Content row -->
+            <RowDefinition/>
+
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0">
+
+            <!-- Header Background -->
+            <Border.Background>
+                <ImageBrush ImageSource="/Res/Images/bg1.jpg" Stretch="UniformToFill"/>
+            </Border.Background>
+
+            <Grid>
+
+                <!-- Header Text -->
+                <TextBlock VerticalAlignment="Bottom" Margin="10" FontSize="25" Foreground="#fff" Text="Set User's Limits">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="3" ShadowDepth="1"></DropShadowEffect>
+                    </TextBlock.Effect>
+                </TextBlock>
+
+                <!-- Back Button -->
+                <Button Style="{StaticResource MaterialDesignFlatButton}" VerticalAlignment="Top" HorizontalAlignment="Left" Command="{x:Static md:Transitioner.MovePreviousCommand}">
+                    <md:PackIcon Kind="ArrowLeft" Height="20" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+                </Button>
+
+                <!-- Close Button -->
+                <Button Style="{StaticResource MaterialDesignFlatButton}" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{x:Static md:DialogHost.CloseDialogCommand}">
+                    <md:PackIcon Kind="Close" Height="20" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+                </Button>
+
+            </Grid>
+        </Border>
+
+
+        <!-- Finish Button -->
+        <Button IsDefault="True" Grid.Row="0" Style="{StaticResource MaterialDesignFloatingActionDarkButton}" VerticalAlignment="Bottom"  Grid.RowSpan="2" HorizontalAlignment="Right" Margin="10 0" Command="{Binding FinishCommand}">
+            <md:PackIcon Kind="Check" Height="30" Width="{Binding RelativeSource={RelativeSource Self}}"/>
+        </Button>
+
+        <!-- Main Content -->
+        <Border Grid.Row="2" Padding="20 0 20 20">
+            <StackPanel VerticalAlignment="Center">
+
+                <!-- Bandwidth limits GroupBox -->
+                <GroupBox Style="{StaticResource MaterialDesignCardGroupBox}" Header="Bandwidth Limit" Margin="0 5">
+                    <GroupBox.HeaderTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                                    <md:PackIcon Kind="Download" Margin="5 0" VerticalAlignment="Bottom" Height="20" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+                                    <TextBlock Text="{Binding}" FontSize="18"/>
+                                </StackPanel>
+                                <ToggleButton DockPanel.Dock="Right" HorizontalAlignment="Right" IsChecked="{Binding IsEnabled, ElementName=BandwidthLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </GroupBox.HeaderTemplate>
+
+                    <!-- GroupBox Content -->
+                    <Grid x:Name="BandwidthLimit" IsEnabled="{Binding HasBandwidthLimits, Mode=TwoWay}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Download Limit -->
+                        <StackPanel>
+                            <TextBlock Text="Download" Foreground="#aaa"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox MaxLength="8" HorizontalAlignment="Stretch" Margin="3 0" Text="{Binding DownloadAmount, UpdateSourceTrigger=PropertyChanged}"/>
+                                <ComboBox Grid.Column="1" SelectedIndex="{Binding DownloadType, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
+                                    <ComboBoxItem Content="KB"/>
+                                    <ComboBoxItem Content="MB"/>
+                                    <ComboBoxItem Content="GB"/>
+                                </ComboBox>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- upload limit -->
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Upload" Foreground="#aaa"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox MaxLength="8" HorizontalAlignment="Stretch" Margin="3 0" Text="{Binding UploadAmount, UpdateSourceTrigger=PropertyChanged}"/>
+                                <ComboBox Grid.Column="1" SelectedIndex="{Binding UploadType, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center">
+                                    <ComboBoxItem Content="KB"/>
+                                    <ComboBoxItem Content="MB"/>
+                                    <ComboBoxItem Content="GB"/>
+                                </ComboBox>
+                            </Grid>
+                        </StackPanel>
+
+                    </Grid>
+                </GroupBox>
+
+                <!-- TimeLimits GroupBox -->
+                <GroupBox Style="{StaticResource MaterialDesignCardGroupBox}" Header="Time Limit" Margin="0 5">
+                    <GroupBox.HeaderTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                                    <md:PackIcon Kind="Timer" Margin="5 0" VerticalAlignment="Bottom" Height="20" Width="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+                                    <TextBlock Text="{Binding}" FontSize="18"/>
+                                </StackPanel>
+                                <ToggleButton DockPanel.Dock="Right" HorizontalAlignment="Right" IsChecked="{Binding IsEnabled ,ElementName=TimeLimit, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </GroupBox.HeaderTemplate>
+                    <Grid x:Name="TimeLimit" IsEnabled="{Binding HasTimeLimits, Mode=TwoWay}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Time Limit Days TextBox -->
+                        <TextBox MaxLength="8" Grid.Column="0" Margin="5 0" md:HintAssist.Hint="Days" md:HintAssist.IsFloating="True" Text="{Binding TimeLimitDays, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Time Limit Hours TextBox -->
+                        <TextBox MaxLength="8" Grid.Column="1" Margin="5 0" md:HintAssist.Hint="Hours" md:HintAssist.IsFloating="True" Text="{Binding TimeLimitHours, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <!-- Time Limit Minutes TextBox -->
+                        <TextBox MaxLength="8" Grid.Column="2" Margin="5 0" md:HintAssist.Hint="Minutes" md:HintAssist.IsFloating="True" Text="{Binding TimeLimitMinutes, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Grid>
+                </GroupBox>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Validity TextBox -->
+                    <TextBox Margin="10 5" ToolTip="Validity of the user ( in days )" Text="{Binding Validity, UpdateSourceTrigger=PropertyChanged}">
+                        <md:HintAssist.Hint>
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Margin="4 0" Kind="Clock"/>
+                                <TextBlock Text="Validity"/>
+                            </StackPanel>
+                        </md:HintAssist.Hint>
+                    </TextBox>
+
+                    <!-- Price TextBox -->
+                    <TextBox Grid.Column="1" Margin="10 5" ToolTip="THe price of the create account ( to be printed on the voucher )" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}">
+                        <md:HintAssist.Hint>
+                            <StackPanel Orientation="Horizontal">
+                                <md:PackIcon Margin="4 0" Kind="Cash"/>
+                                <TextBlock Text="Price"/>
+                            </StackPanel>
+                        </md:HintAssist.Hint>
+                    </TextBox>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+
+
+</UserControl>

@@ -1,0 +1,420 @@
+﻿<UserControl x:Class="EZ_TIK.Views.HotspotUsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:tz="http://schemas.abtsoftware.co.uk/transitionz"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             Background="{StaticResource MaterialDesignPaper}"
+             d:DesignHeight="743" d:DesignWidth="1024">
+
+    <!--#region Command Bindings -->
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}" />
+        <KeyBinding Modifiers="Shift" Key="Delete" Command="{Binding RemoveCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
+        <KeyBinding Modifiers="Control" Key="N" Command="{Binding AddUserCommand}"/>
+    </UserControl.InputBindings>
+
+    <!--#endregion -->
+
+    <!-- User Control Resources -->
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+
+
+            <!-- Importing Resorce Dictionaries -->
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- Importing Styles for PopUp Box -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.PopupBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+
+                <!-- Importing templates for DataGrid -->
+                <ResourceDictionary Source="pack://application:,,,/EZ-TIK.Resources;component/DataGrid Templates/RowDetailTemplates.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+            
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <Grid>
+
+        <!-- Grid Rows -->
+        <Grid.RowDefinitions>
+
+            <!-- Menu Row -->
+            <RowDefinition Height="Auto"/>
+
+            <!-- Toolbar & Users List Rows -->
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+
+            <!-- Footer Rows -->
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+
+        <!-- Top Menu -->
+        <Menu Margin="5 5 5 -18">
+
+            <Menu.Resources>
+                <Style TargetType="md:PackIcon" x:Key="MenuIcon">
+                    <Setter Property="Width" Value="25"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0 0 5 0"/>
+                </Style>
+                
+            </Menu.Resources>
+            <!-- File SubMenu -->
+            <MenuItem VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="File" Style="{StaticResource MenuIcon}"/>
+                        <TextBlock Text="File"/>
+                    </StackPanel>
+                </MenuItem.Header>
+
+                <!-- File Items -->
+
+                <!-- Single Add -->
+                <MenuItem ToolTip="Add Single User" Command="{Binding AddUserCommand}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="AccountPlus" Style="{StaticResource MenuIcon}"/>
+                            <TextBlock Text="New User"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <!-- Batch Add -->
+                <MenuItem ToolTip="Add Multiple Users at once" Command="{Binding AddUsersCommand}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="AccountMultiplePlus" Style="{StaticResource MenuIcon}"/>
+                            <TextBlock Text="New Users"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <!-- Sperator -->
+                <Separator Style="{StaticResource MaterialDesignDarkSeparator}"/>
+
+                <!-- Print Selected Users As Vouchers-->
+                <MenuItem ToolTip="Print the selected users as vouchers">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Printer" Style="{StaticResource MenuIcon}"/>
+                            <TextBlock Text="Print As Vouchers"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+
+            </MenuItem>
+
+            <!-- Edit Sub Menu -->
+            <MenuItem>
+                
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <md:PackIcon Kind="Pencil" Style="{StaticResource MenuIcon}"/>
+                        <TextBlock Text="Edit"/>
+                    </StackPanel>
+                </MenuItem.Header>
+
+                <!-- Remove Users -->
+                <MenuItem ToolTip="Remove Users" Command="{Binding RemoveCommand}" IsEnabled="{Binding HasSelectedUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Delete" Style="{StaticResource MenuIcon}"/>
+                            <TextBlock Text="Remove Users"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <!-- Edit Users -->
+                <MenuItem ToolTip="Edit First Selected User" Command="{Binding EditUserCommand}" IsEnabled="{Binding HasSingleSelectedUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Pencil" Style="{StaticResource MenuIcon}"/>
+                            <TextBlock Text="Edit User"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <!-- Sperator -->
+                <Separator Style="{StaticResource MaterialDesignDarkSeparator}"/>
+                
+                <!-- Disable Users -->
+                <MenuItem ToolTip="Disable Selected Users" Command="{Binding ToggleCommand}" CommandParameter="{Binding FalseValue}" IsEnabled="{Binding HasEnabledUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Stop" Style="{StaticResource MenuIcon}"/>
+                            <TextBlock Text="Disable Users"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <!-- Enable Users -->
+                <MenuItem ToolTip="Enable Selected Users" Command="{Binding ToggleCommand}" CommandParameter="{Binding TrueValue}" IsEnabled="{Binding HasDisbledUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Play" Style="{StaticResource MenuIcon}"/>
+                            <TextBlock Text="Enable Users"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+            </MenuItem>
+
+        </Menu>
+
+        <!-- Toolbar -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right" Panel.ZIndex="1" VerticalAlignment="Bottom">
+
+            <!-- Edit Button -->
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" ToolTip="Edit User" VerticalAlignment="Bottom" Margin="5 0" Command="{Binding EditUserCommand}"
+                    tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=200, TransitionOn=Visibility}"
+                    tz:Transitionz.Translate="{tz:TranslateParams From='10,0', To='0,0', Duration=200, TransitionOn=Visibility}"
+                    tz:Transitionz.Visibility="{Binding HasSingleSelectedUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <md:PackIcon Kind="Pencil"/>
+            </Button>
+
+            <StackPanel Orientation="Horizontal" 
+                    tz:Transitionz.Opacity="{tz:OpacityParams From=0, To=1, Duration=200, TransitionOn=Visibility}"
+                    tz:Transitionz.Translate="{tz:TranslateParams From='10,0', To='0,0', Duration=200, TransitionOn=Visibility}"
+                    tz:Transitionz.Visibility="{Binding HasSelectedUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <!-- Delete Button -->
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="Delete User" Command="{Binding RemoveCommand}" Margin="5 0">
+                    <md:PackIcon Kind="Delete"/>
+                </Button>
+
+                <!-- Disable Button -->
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" ToolTip="Disable User" Command="{Binding ToggleCommand}" CommandParameter="{Binding TrueValue}" Margin="5 0"
+                        Visibility="{Binding HasEnabledUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <md:PackIcon Kind="Stop"/>
+                </Button>
+
+                <!-- Enable Button -->
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" ToolTip="Disable User" Command="{Binding ToggleCommand}" CommandParameter="{Binding FalseValue}" Margin="5 0"
+                        Visibility="{Binding HasDisabledUsers, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <md:PackIcon Kind="Play"/>
+                </Button>
+
+                <!-- Reset Button -->
+                <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" ToolTip="Reset User" Command="{Binding ResetCommand}" Margin="5 0">
+                    <md:PackIcon Kind="BackupRestore"/>
+                </Button>
+
+            </StackPanel>
+
+
+            <!-- Search PopupBox -->
+            <md:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionDarkPopupBox}" ToolTip="Find User"
+                         Height="40" Width="{Binding ActualHeight , RelativeSource={RelativeSource Self}}"
+                         PlacementMode="TopAndAlignRightEdges" HorizontalAlignment="Right"
+                         VerticalAlignment="Bottom" StaysOpen="True"
+                         Margin="5 0 10 0">
+
+                <md:PopupBox.ToggleContent>
+                    <md:PackIcon Kind="Magnify" Width="20" Height="20" Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=md:PopupBox}, Path=Foreground}" />
+                </md:PopupBox.ToggleContent>
+
+                <!-- Search TextBox -->
+                <md:ColorZone Padding="10" Background="{StaticResource MaterialDesignPaper}" md:ShadowAssist.ShadowDepth="Depth2">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+
+                            <!-- Search Button Column -->
+                            <ColumnDefinition Width="Auto" />
+
+                            <!-- Search Input Column -->
+                            <ColumnDefinition Width="*" />
+
+                            <!-- Clear Text Button -->
+                            <ColumnDefinition Width="Auto" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Seach Button -->
+                        <Button Style="{DynamicResource MaterialDesignToolButton}" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=UsersList}">
+                            <md:PackIcon Kind="Magnify" Opacity=".56" />
+                        </Button>
+
+                        <!-- Search input -->
+                        <TextBox Grid.Column="1" Margin="8 0 0 0" md:HintAssist.Hint="Search..."
+            			    md:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0"
+            			    MinWidth="200" VerticalAlignment="Center" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=UsersList}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+
+                        <!-- Clear Button -->
+                        <Button Style="{DynamicResource MaterialDesignToolButton}" Grid.Column="2">
+                            <md:PackIcon Kind="Close" Opacity=".56" Margin="8 0 0 0" />
+                        </Button>
+
+                    </Grid>
+                </md:ColorZone>
+
+            </md:PopupBox>
+
+        </StackPanel>
+
+        <!-- Users List -->
+        <DataGrid x:Name="UsersList" ItemsSource="{Binding Users}"  SelectedCellsChanged="UsersList_SelectionChanged" Grid.Row="2" Grid.RowSpan="2" AutoGenerateColumns="False" RowDetailsVisibilityMode="{Binding Path=SelectedItems.Count, RelativeSource={RelativeSource Self}, Converter={StaticResource OnlyOneDetailedRowVisibleConverter}}" CanUserDeleteRows="False" RowDetailsTemplate="{StaticResource HotspotUserDetailRowTemplate}">
+
+            <!-- Data Grid Columns -->
+            <DataGrid.Columns>
+
+                <!-- Selection Column -->
+                <DataGridCheckBoxColumn Binding="{Binding IsSelected}" 
+                                        ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                        EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                    <DataGridCheckBoxColumn.Header>
+                        <!--padding to allow hit test to pass thru for sorting -->
+                        <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
+                            <CheckBox HorizontalAlignment="Center"                                               
+                                          DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"
+                                          IsChecked="{Binding IsAllSelected}" />
+                        </Border>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
+
+                <!-- Username Column -->
+                <DataGridTextColumn Binding="{Binding Username}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Account" VerticalAlignment="Center" Margin="5 0"/>
+                            <TextBlock Text="Username"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <!-- Password Column -->
+                <DataGridTextColumn Binding="{Binding Password}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Lock" VerticalAlignment="Center" Margin="5 0"/>
+                            <TextBlock Text="Password"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <!-- Profile Column -->
+                <DataGridTextColumn Binding="{Binding Profile}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="FaceProfile" VerticalAlignment="Center" Margin="5 0"/>
+                            <TextBlock Text="Profile"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <!-- Limit Bytesout Column -->
+                <DataGridTextColumn Binding="{Binding LimitBytesOut}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Download" VerticalAlignment="Center" Margin="5 0"/>
+                            <TextBlock Text="Download Limit"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <!-- LimitUptime Column -->
+                <DataGridTextColumn Binding="{Binding LimitUptime, Converter={StaticResource MikrotikTimeToReadableConverter}}" IsReadOnly="True">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Timer" VerticalAlignment="Center" Margin="5 0"/>
+                            <TextBlock Text="Time Limit"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <!-- Validity Column -->
+                <DataGridTextColumn Binding="{Binding Validity, Converter={StaticResource IntToReadableValidityDaysConverter}}">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="AvTimer" VerticalAlignment="Center" Margin="5 0"/>
+                            <TextBlock Text="Validity"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+                <!-- LimitUptime Column -->
+                <DataGridTextColumn Binding="{Binding Comment}" Width="*">
+                    <DataGridTextColumn.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <md:PackIcon Kind="Note" VerticalAlignment="Center" Margin="5 0"/>
+                            <TextBlock Text="Notes"/>
+                        </StackPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+
+            </DataGrid.Columns>
+
+            <!-- Row Styles -->
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsDisabled}" Value="True">
+                            <Setter Property="Background" Value="#cdcdcd"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+
+        </DataGrid>
+
+        <!-- Add Users Popup Box -->
+        <md:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                     PlacementMode="TopAndAlignCentres" Grid.Row="3" HorizontalAlignment="Right"
+                     VerticalAlignment="Bottom" PopupMode="Click"
+                     Opacity="0.7" Margin="0 0 20 10">
+
+            <!-- PopupBox Items -->
+            <StackPanel>
+
+                <!-- Add Single User -->
+                <Button ToolTip="Add Single User" Command="{Binding AddUserCommand}">
+                    <md:PackIcon Kind="AccountPlus" />
+                </Button>
+
+                <!-- Add Multiple Users -->
+                <Button ToolTip="Batch Adding" Command="{Binding AddUsersCommand}">
+                    <md:PackIcon Kind="AccountMultiplePlus" />
+                </Button>
+
+            </StackPanel>
+
+        </md:PopupBox>
+
+        <!-- Footer -->
+        <md:ColorZone Grid.Row="4" Margin="0 0 0 0" Padding="3" md:ShadowAssist.ShadowDepth="Depth2" VerticalAlignment="Stretch" Mode="PrimaryDark">
+            <DockPanel>
+
+                <!-- Total and selected items count -->
+                <TextBlock DockPanel.Dock="Left" Margin="20 0" VerticalAlignment="Center">
+                    Total Items : <Run Text="{Binding UsersCount, FallbackValue= - , Mode=OneWay}"/>
+                    , Selected : <Run Text="{Binding SelectedUsersCount, FallbackValue= - , Mode=OneWay}"/>
+                </TextBlock>
+
+                <Button DockPanel.Dock="Right" Style="{StaticResource MaterialDesignFlatButton}" HorizontalAlignment="Right" ToolTip="Refresh" Command="{Binding RefreshCommand}" CommandParameter="{Binding ElementName=LOL}">
+                    <md:PackIcon Kind="Refresh" Foreground="{StaticResource MaterialDesignDarkForeground}"/>
+                </Button>
+
+            </DockPanel>
+        </md:ColorZone>
+
+    </Grid>
+</UserControl>

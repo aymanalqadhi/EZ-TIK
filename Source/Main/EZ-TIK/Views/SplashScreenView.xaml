@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="EZ_TIK.Views.SplashScreenView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:local="clr-namespace:EZ_TIK.Views"
+             Background="{DynamicResource AccentColorBrush}"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1000">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock FontSize="88" FontWeight="ExtraLight" Foreground="#99ffffff" Margin="0 0 0 50"
+                       Text="{Binding Title, FallbackValue=EZ-TiK}" />
+            <metro:ProgressRing Foreground="#99ffffff" Height="50" Width="50" />
+        </StackPanel>
+    </Grid>
+</UserControl>
