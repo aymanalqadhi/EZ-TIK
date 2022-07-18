@@ -30,7 +30,7 @@ namespace EZ_TIK
 
         public static MetroDialogSettings MaterialDialogSettings = new MetroDialogSettings
         {
-            SuppressDefaultResources = true,
+            //SuppressDefaultResources = true,
             CustomResourceDictionary =
                 new ResourceDictionary
                 {

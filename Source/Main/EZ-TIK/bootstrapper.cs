@@ -49,8 +49,9 @@ namespace EZ_TIK
 
             Container.RegisterType<IDialogService, DialogService>();
 
-            var conn = ConnectionFactory.OpenConnection(TikConnectionType.Api, "5.5.5.6", 8728, "admin", "");
-            Container.RegisterInstance(typeof(ITikConnection), conn);
+            //var conn = ConnectionFactory.OpenConnection(TikConnectionType.Api, "5.5.5.6", 8728, "admin", "");
+            //Container.RegisterInstance(typeof(ITikConnection), conn);
+            Container.RegisterInstance(ConnectionFactory.CreateConnection(TikConnectionType.Api));
 
             Container.RegisterType<IHotspotClient, HotspotClient>();
             Container.RegisterType<IUserManagerClient, UserManagerClient>();
